@@ -1,7 +1,7 @@
 import {
   HandLandmarker,
   FilesetResolver,
-} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18";
+} from "./vendor/tasks-vision/vision_bundle.mjs";
 
 // ---------- Config ----------
 const ALIEN_COUNT = 50;
@@ -110,12 +110,11 @@ resizeCanvas();
 // ---------- Setup hand tracking ----------
 async function initHandTracking() {
   const vision = await FilesetResolver.forVisionTasks(
-    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm"
+    "vendor/tasks-vision/wasm"
   );
   handLandmarker = await HandLandmarker.createFromOptions(vision, {
     baseOptions: {
-      modelAssetPath:
-        "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+      modelAssetPath: "vendor/hand_landmarker.task",
       delegate: "GPU",
     },
     runningMode: "VIDEO",
