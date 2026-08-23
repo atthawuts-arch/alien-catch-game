@@ -9,6 +9,7 @@ const IDLE_COUNT = 18;          // aliens drifting in the background on menus
 const OVER_TIMEOUT_MS = 10000;  // return to start screen this long after score shows
 const GAME_SECONDS = 30;
 const ALIEN_SIZE = 90;          // drawn diameter in px
+const EDGE_MARGIN = 0.08;       // keep aliens this fraction of the screen away from every edge
 const CATCH_PADDING = 24;       // extra forgiveness on the hit radius
 const GRAB_FINGERS_NEEDED = 3;  // how many curled fingers count as a "grab" (of 4)
 const ALIENS_DIR = "Aliens/";   // all image files in here are used as alien styles
@@ -154,14 +155,15 @@ function buildStyleAssignments(count) {
 
 function spawnAliens(count = ALIEN_COUNT) {
   aliens = [];
-  const r = ALIEN_SIZE / 2;
+  const mx = canvas.width * EDGE_MARGIN;
+  const my = canvas.height * EDGE_MARGIN;
   const styles = buildStyleAssignments(count);
   for (let i = 0; i < count; i++) {
     const speed = 80 + Math.random() * 150; // pixels per second
     const angle = Math.random() * Math.PI * 2;
     aliens.push({
-      x: r + Math.random() * (canvas.width - ALIEN_SIZE),
-      y: r + Math.random() * (canvas.height - ALIEN_SIZE),
+      x: mx + Math.random() * (canvas.width - 2 * mx),
+      y: my + Math.random() * (canvas.height - 2 * my),
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       wobble: Math.random() * Math.PI * 2,
@@ -173,7 +175,10 @@ function spawnAliens(count = ALIEN_COUNT) {
 }
 
 function updateAliens(dt) {
-  const r = ALIEN_SIZE / 2;
+  // Keep aliens inside a safe zone (inset from every edge) so they stay in the
+  // camera's trackable area — hands near the frame edge aren't detected well.
+  const mx = canvas.width * EDGE_MARGIN;
+  const my = canvas.height * EDGE_MARGIN;
   for (const a of aliens) {
     if (!a.alive) {
       if (a.pop > 0) a.pop -= dt * 3.6;
@@ -182,11 +187,11 @@ function updateAliens(dt) {
     a.x += a.vx * dt;
     a.y += a.vy * dt;
     a.wobble += dt * 5;
-    // bounce off walls
-    if (a.x < r) { a.x = r; a.vx *= -1; }
-    if (a.x > canvas.width - r) { a.x = canvas.width - r; a.vx *= -1; }
-    if (a.y < r) { a.y = r; a.vy *= -1; }
-    if (a.y > canvas.height - r) { a.y = canvas.height - r; a.vy *= -1; }
+    // bounce off the safe-zone walls
+    if (a.x < mx) { a.x = mx; a.vx *= -1; }
+    if (a.x > canvas.width - mx) { a.x = canvas.width - mx; a.vx *= -1; }
+    if (a.y < my) { a.y = my; a.vy *= -1; }
+    if (a.y > canvas.height - my) { a.y = canvas.height - my; a.vy *= -1; }
   }
 }
 
