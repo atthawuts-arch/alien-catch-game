@@ -1,2 +1,5 @@
 scratchpad/
 .DS_Store
+
+.vercel
+.env*

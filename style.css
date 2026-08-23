@@ -82,6 +82,26 @@ html, body {
   font-size: clamp(32px, 6vw, 52px);
   margin-bottom: 16px;
 }
+.big-title {
+  font-size: clamp(48px, 10vw, 104px) !important;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #8affc1, #6fd6ff 45%, #d98aff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 24px rgba(123, 63, 242, 0.55));
+  margin-bottom: 20px;
+}
+.thankyou {
+  font-size: clamp(34px, 6vw, 68px) !important;
+  font-weight: 900;
+  line-height: 1.15;
+  color: #ffe066 !important;
+  text-shadow: 0 3px 18px rgba(0,0,0,0.6), 0 0 28px rgba(255, 214, 102, 0.4);
+  margin: 6px 0 18px;
+}
 .panel p { font-size: 18px; line-height: 1.5; margin-bottom: 14px; color: #d8d2ff; }
 .how {
   list-style: none;
