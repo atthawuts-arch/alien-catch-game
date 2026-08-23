@@ -5,6 +5,8 @@ import {
 
 // ---------- Config ----------
 const ALIEN_COUNT = 50;
+const IDLE_COUNT = 18;          // aliens drifting in the background on menus
+const OVER_TIMEOUT_MS = 10000;  // return to start screen this long after score shows
 const GAME_SECONDS = 30;
 const ALIEN_SIZE = 90;          // drawn diameter in px
 const CATCH_PADDING = 24;       // extra forgiveness on the hit radius
@@ -43,6 +45,7 @@ const handLatched = [false, false];
 let cameraReady = false;
 let armStart = 0;               // timestamp when both hands first raised
 let armLockUntil = 0;           // ignore arming until this time (post-game cooldown)
+let overShownAt = 0;            // when the game-over screen appeared (for auto-return)
 const ARM_HOLD_MS = 1500;       // how long to hold both hands up to start
 
 // ---------- Assets ----------
@@ -133,10 +136,10 @@ async function startWebcam() {
 // ---------- Aliens ----------
 // Build a list of 50 style indices split as evenly as possible across the
 // available images (e.g. 6 styles -> 9,9,8,8,8,8), then shuffle so they mix.
-function buildStyleAssignments() {
+function buildStyleAssignments(count) {
   const n = Math.max(1, alienImages.length);
-  const base = Math.floor(ALIEN_COUNT / n);
-  const rem = ALIEN_COUNT % n;
+  const base = Math.floor(count / n);
+  const rem = count % n;
   const indices = [];
   for (let i = 0; i < n; i++) {
     const count = base + (i < rem ? 1 : 0);
@@ -150,11 +153,11 @@ function buildStyleAssignments() {
   return indices;
 }
 
-function spawnAliens() {
+function spawnAliens(count = ALIEN_COUNT) {
   aliens = [];
   const r = ALIEN_SIZE / 2;
-  const styles = buildStyleAssignments();
-  for (let i = 0; i < ALIEN_COUNT; i++) {
+  const styles = buildStyleAssignments(count);
+  for (let i = 0; i < count; i++) {
     const speed = 80 + Math.random() * 150; // pixels per second
     const angle = Math.random() * Math.PI * 2;
     aliens.push({
@@ -394,8 +397,10 @@ function loop() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Aliens keep drifting at all times (gameplay + idle menus)
+  updateAliens(dt);
+
   if (running) {
-    updateAliens(dt);
     checkCatches();
     // timer
     const remaining = Math.max(0, Math.ceil((endTime - performance.now()) / 1000));
@@ -403,6 +408,14 @@ function loop() {
     if (performance.now() >= endTime) endGame();
   } else {
     updateArming();
+    // Auto-return to the start screen if the score has been up for a while
+    if (
+      !overScreen.classList.contains("hidden") &&
+      overShownAt &&
+      performance.now() - overShownAt >= OVER_TIMEOUT_MS
+    ) {
+      goToStart();
+    }
   }
 
   drawAliens();
@@ -429,10 +442,21 @@ function endGame() {
   running = false;
   armStart = 0;
   armLockUntil = performance.now() + 1500; // brief pause before restart gesture arms
+  overShownAt = performance.now();
   hud.classList.add("hidden");
   finalScoreEl.textContent = score;
   rankEl.textContent = rankFor(score);
   overScreen.classList.remove("hidden");
+}
+
+// Return to the start screen (from the game-over screen) and refresh the
+// ambient background aliens.
+function goToStart() {
+  overShownAt = 0;
+  armStart = 0;
+  overScreen.classList.add("hidden");
+  startScreen.classList.remove("hidden");
+  spawnAliens(IDLE_COUNT);
 }
 
 function rankFor(s) {
@@ -467,6 +491,9 @@ async function boot() {
     requestAnimationFrame(loop);
     return;
   }
+
+  // Ambient aliens drifting behind the start screen
+  spawnAliens(IDLE_COUNT);
 
   try {
     await initHandTracking();
