@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alien Catch — Hand Tracking Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="stage">
+    <!-- Webcam feed (mirrored, faint overlay) -->
+    <video id="webcam" autoplay playsinline muted></video>
+
+    <!-- Game canvas: aliens, hand markers -->
+    <canvas id="game"></canvas>
+
+    <!-- Fullscreen toggle (bottom-left) -->
+    <button id="fs-btn" title="Toggle fullscreen">⛶ Fullscreen</button>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-item">Score: <span id="score">0</span> / 50</div>
+      <div class="hud-item">Time: <span id="time">30</span>s</div>
+    </div>
+
+    <!-- Start screen -->
+    <div id="start-screen" class="overlay">
+      <div class="panel">
+        <h1>👽 Alien Catch</h1>
+        <p>50 aliens are loose in space! Catch as many as you can in
+           <strong>30 seconds</strong>.</p>
+        <ul class="how">
+          <li>✋ Move your hand over an alien</li>
+          <li>✊ Close your hand into a grab to catch it</li>
+          <li>🙌 Both hands work — catch faster!</li>
+        </ul>
+        <p class="status" id="start-status">Loading hand tracking…</p>
+        <p class="thai">ยกมือขึ้นสองมือ เพื่อเริ่มเกม</p>
+        <p class="arm" id="start-arm">Raise both hands to start</p>
+        <button id="enable-cam" class="hidden">Enable Camera</button>
+      </div>
+    </div>
+
+    <!-- Game over screen -->
+    <div id="over-screen" class="overlay hidden">
+      <div class="panel">
+        <h1>Time's Up! ⏱️</h1>
+        <p class="final">You caught <span id="final-score">0</span> aliens!</p>
+        <p id="rank" class="rank"></p>
+        <p class="thai">ยกมือขึ้นสองมือ เพื่อเริ่มเกม</p>
+        <p class="arm" id="over-arm">Raise both hands to play again</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>
