@@ -1,0 +1,60 @@
+/* ===== 2-player VS overrides (loaded after style.css) ===== */
+
+:root {
+  --p1: #4db8ff;   /* Player 1 — blue */
+  --p2: #ff9f40;   /* Player 2 — orange */
+  --divider: #39ff14;
+}
+
+/* HUD: three items (P1 | timer | P2) */
+#hud .hud-item.p1 { color: var(--p1); border-color: rgba(77, 184, 255, 0.5); }
+#hud .hud-item.p2 { color: var(--p2); border-color: rgba(255, 159, 64, 0.5); }
+#hud .hud-item.timer { color: #fff; }
+
+.c-p1 { color: var(--p1); font-weight: 800; }
+.c-p2 { color: var(--p2); font-weight: 800; }
+
+.edition-badge {
+  display: inline-block;
+  font-size: 15px !important;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffe066 !important;
+  background: rgba(255, 224, 102, 0.12);
+  border: 1px solid rgba(255, 224, 102, 0.4);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px !important;
+}
+
+/* Game-over score comparison */
+.final-scores {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin: 10px 0 16px;
+}
+.fs-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 130px;
+  padding: 14px 10px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.fs-col.p1 { border: 2px solid var(--p1); }
+.fs-col.p2 { border: 2px solid var(--p2); }
+.fs-label { font-size: 16px; font-weight: 700; color: #d8d2ff; margin-bottom: 4px; }
+.fs-col.p1 .fs-label { color: var(--p1); }
+.fs-col.p2 .fs-label { color: var(--p2); }
+.fs-num { font-size: 54px; font-weight: 900; line-height: 1; color: #fff; }
+.fs-vs { font-size: 24px; font-weight: 800; color: #9a92c9; }
+
+.fs-col.winner {
+  box-shadow: 0 0 30px rgba(255, 224, 102, 0.6);
+  transform: scale(1.08);
+}
+
+#winner-title { font-size: clamp(30px, 5vw, 52px); }

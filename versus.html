@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Save the Alien — Together Edition (2P VS)</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="versus.css" />
+</head>
+<body>
+  <div id="stage">
+    <!-- Webcam feed (mirrored, faint overlay) -->
+    <video id="webcam" autoplay playsinline muted></video>
+
+    <!-- Game canvas: aliens, divider, hand markers -->
+    <canvas id="game"></canvas>
+
+    <!-- Fullscreen toggle (bottom-left) -->
+    <button id="fs-btn" title="Toggle fullscreen">⛶ Fullscreen</button>
+
+    <!-- HUD: P1 score | timer | P2 score -->
+    <div id="hud" class="hidden">
+      <div class="hud-item p1">P1: <span id="p1-score">0</span> / 50</div>
+      <div class="hud-item timer">Time: <span id="time">60</span>s</div>
+      <div class="hud-item p2">P2: <span id="p2-score">0</span> / 50</div>
+    </div>
+
+    <!-- Start screen -->
+    <div id="start-screen" class="overlay">
+      <div class="panel panel-start">
+        <img class="hero-aliens" src="Aliens/GM-Three_0.png" alt="Three stacked aliens" />
+        <div class="start-text">
+          <h1 class="big-title">Save the Alien</h1>
+          <p class="edition-badge">TOGETHER EDITION · 2 PLAYERS VS</p>
+          <p>Split screen! First player to catch <strong>50 aliens</strong> wins.
+             If time runs out, the higher score wins. <strong>60 seconds</strong>.</p>
+          <ul class="how">
+            <li>👈 <span class="c-p1">Player 1</span> plays the left side</li>
+            <li>👉 <span class="c-p2">Player 2</span> plays the right side</li>
+            <li>✊ One hand each — grab aliens on your own side</li>
+          </ul>
+          <p class="status" id="start-status">Loading hand tracking…</p>
+          <p class="thai">ผู้เล่นทั้งสองยกมือคนละ 1 ข้าง เพื่อเริ่มเกม</p>
+          <p class="arm" id="start-arm">Each player raise one hand to start</p>
+          <button id="enable-cam" class="hidden">Enable Camera</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game over screen -->
+    <div id="over-screen" class="overlay hidden">
+      <div class="panel">
+        <h1 id="winner-title">Time's Up! ⏱️</h1>
+        <div class="final-scores">
+          <div class="fs-col p1"><span class="fs-label">Player 1</span><span id="final-p1" class="fs-num">0</span></div>
+          <div class="fs-vs">VS</div>
+          <div class="fs-col p2"><span class="fs-label">Player 2</span><span id="final-p2" class="fs-num">0</span></div>
+        </div>
+        <p class="thai">ยกมือคนละ 1 ข้าง เพื่อเล่นอีกครั้ง</p>
+        <p class="arm" id="over-arm">Each player raise one hand to play again</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="versus.js"></script>
+</body>
+</html>
